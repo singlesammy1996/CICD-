@@ -17,7 +17,7 @@ import HelloWorld from './components/HelloWorld.vue'
 // obj.innerFn() // 200
 // obj.arrowFn() // 100
 // const a = fn().innerFn
-// a() 
+// a()
 </script>
 
 <template>
