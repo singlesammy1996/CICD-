@@ -1,0 +1,42 @@
+name: Deploy Frontend App
+
+# 当以下事件发生时，这个工作流将被触发
+on:
+  push:
+    branches:
+      - main  # 当代码被推送到 main 分支时
+
+# 定义一个名为 "build-and-deploy" 的任务
+jobs:
+  build-and-deploy:
+    # 运行这个任务的操作系统环境
+    runs-on: ubuntu-latest
+
+    # 工作流步骤
+    steps:
+      # 第一步：检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取所有历史，以防需要
+
+      # 第二步：设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # 使用 Node.js 18 版本
+
+      # 第三步：安装依赖
+      - name: Install dependencies
+        run: npm install
+
+      # 第四步：构建项目
+      - name: Build project
+        run: npm run build
+
+      # 第五步：部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 使用内置的 GitHub token
+          publish_dir: ./dist # 指定需要部署的静态文件目录，请根据你的项目实际情况修改
