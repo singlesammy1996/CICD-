@@ -11,6 +11,9 @@ jobs:
   build-and-deploy:
     # 运行这个任务的操作系统环境
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许写入仓库内容
+      pages: write     # 允许写入 GitHub Pages
 
     # 工作流步骤
     steps:
