@@ -18,10 +18,64 @@ import HelloWorld from './components/HelloWorld.vue'
 // obj.arrowFn() // 100
 // const a = fn().innerFn
 // a()
+
+// 自定义表格组件部分
+import DataTable from './components/DataTable.vue'
+// 多级表头
+const tableHeaders = [
+  [
+    // 第一列：基础信息 (父级)
+    {
+      label: '基础信息',
+      children: [
+        { label: 'ID', key: 'id' },
+        { label: '姓名', key: 'name' },
+      ],
+    },
+    // 第二列：销售业绩 (父级)
+    {
+      label: '销售业绩（单位：元）',
+      children: [
+        { label: '季度销售', key: 'qtr_sales' },
+        { label: '年度目标', key: 'annual_sales' },
+      ],
+    },
+    // 第三列：操作（单列）
+    {
+      label: '操作',
+      key: 'action',
+    },
+  ],
+]
+// 表格数据
+const tableData = [
+  {
+    id: 1001,
+    name: '张三',
+    qtr_sales: 12000,
+    annual_sales: 48000,
+    detail: '张三是团队的核心成员，年度目标完成度高。',
+  },
+  {
+    id: 1002,
+    name: '李四',
+    qtr_sales: 18000,
+    annual_sales: 72000,
+    detail: '李四超额完成季度目标，已提前锁定年度奖金',
+  },
+  {
+    id: 1003,
+    name: '王五',
+    qtr_sales: 8500,
+    annual_sales: 34000,
+    detail: '王五的季度目标完成度低于要求，需提高目标完成度。',
+  },
+]
+// 自定义表格组件部分
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -34,7 +88,24 @@ import HelloWorld from './components/HelloWorld.vue'
     </div>
   </header>
 
-  <RouterView />
+  <RouterView /> -->
+
+  <!-- 表格 -->
+  <div style="padding: 20px">
+    <h1>基础表格展示</h1>
+    <DataTable :headers="tableHeaders" :items="tableData" item-key="id">
+      <template #annual_sales="{ item }">
+        <span :style="{ color: item.annual_sales > 5000 ? 'green' : 'red' }" class="font-medium">
+          ${{ item.annual_sales.toLocaleString() }}
+        </span>
+      </template>
+
+      <template #name="{ item }">
+        <span style="font-weight: bold; color: #409eff"> {{ item.name }}(ID: {{ item.id }}) </span>
+      </template>
+    </DataTable>
+  </div>
+  <!-- 表格 -->
 </template>
 
 <style scoped>
