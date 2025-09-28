@@ -21,6 +21,8 @@ import HelloWorld from './components/HelloWorld.vue'
 
 // 自定义表格组件部分
 import DataTable from './components/DataTable.vue'
+import { ref } from 'vue'
+const dataTableRef = ref()
 // 多级表头
 const tableHeaders = [
   [
@@ -71,6 +73,14 @@ const tableData = [
     detail: '王五的季度目标完成度低于要求，需提高目标完成度。',
   },
 ]
+
+const handleExpandChange = (row, expandedRows) => {
+  console.log('展开状态变化:', row, expandedRows)
+}
+
+const toggleExpand = (row) => {
+  dataTableRef.value.toggleRowExpansion(row)
+}
 // 自定义表格组件部分
 </script>
 
@@ -93,7 +103,7 @@ const tableData = [
   <!-- 表格 -->
   <div style="padding: 20px">
     <h1>基础表格展示</h1>
-    <DataTable :headers="tableHeaders" :items="tableData" item-key="id">
+    <DataTable :headers="tableHeaders" :items="tableData" item-key="id" ref="dataTableRef">
       <template #annual_sales="{ item }">
         <span :style="{ color: item.annual_sales > 5000 ? 'green' : 'red' }" class="font-medium">
           ${{ item.annual_sales.toLocaleString() }}
@@ -102,6 +112,16 @@ const tableData = [
 
       <template #name="{ item }">
         <span style="font-weight: bold; color: #409eff"> {{ item.name }}(ID: {{ item.id }}) </span>
+      </template>
+
+      <template #action="{ item }">
+        <el-button size="small" @click="toggleExpand(item)">查看详情</el-button>
+      </template>
+
+      <template #expand="scope">
+        <div style="color:#000 ;width:100%;height:30px;">
+          {{ scope.row.detail }}
+        </div>
       </template>
     </DataTable>
   </div>
